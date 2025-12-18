@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎄 Für dich</title>
+  <style>
+    :root{
+      --bg1:#0b1422;
+      --bg2:#0d1b2a;
+      --card:#0f2236cc;
+      --text:#f7f2e8;
+      --muted:#cbbfae;
+      --gold:#ffd48a;
+      --red:#ff5a6a;
+      --green:#77d39b;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(255,212,138,.12), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, rgba(119,211,155,.10), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+
+    /* Snow */
+    .snow, .snow:before, .snow:after{
+      position:fixed;
+      top:-120vh;
+      left:0;
+      right:0;
+      bottom:0;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.9) 50%, transparent 55%),
+        radial-gradient(1.5px 1.5px at 60px 80px, rgba(255,255,255,.7) 50%, transparent 55%),
+        radial-gradient(1px 1px at 110px 140px, rgba(255,255,255,.65) 50%, transparent 55%),
+        radial-gradient(2px 2px at 160px 200px, rgba(255,255,255,.8) 50%, transparent 55%);
+      background-size: 220px 260px;
+      opacity:.35;
+      animation: fall 22s linear infinite;
+      pointer-events:none;
+      filter: blur(.1px);
+    }
+    .snow:before{ content:""; opacity:.25; animation-duration: 30s; transform: translateX(40px); }
+    .snow:after{ content:""; opacity:.18; animation-duration: 38s; transform: translateX(-50px); }
+    @keyframes fall { to { transform: translateY(220vh); } }
+
+    /* Layout */
+    .wrap{
+      width:min(920px, 92vw);
+      position:relative;
+      padding:18px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(15,34,54,.78), rgba(15,34,54,.55));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 26px 22px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.15);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .badge .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, var(--gold), #ffb95a);
+      box-shadow: 0 0 18px rgba(255,212,138,.45);
+    }
+
+    .music{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--muted);
+      font-size:14px;
+      opacity:.9;
+      user-select:none;
+    }
+    .music .bar{
+      width:38px;height:10px;border-radius:6px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      position:relative;
+    }
+    .music .bar::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, transparent, rgba(255,212,138,.45), transparent);
+      transform: translateX(-60%);
+      animation: wave 1.4s ease-in-out infinite;
+      opacity:.8;
+    }
+    @keyframes wave { 50%{ transform: translateX(60%);} }
+
+    h1{
+      margin: 10px 0 6px;
+      font-size: clamp(24px, 3.5vw, 34px);
+      letter-spacing: .2px;
+    }
+    .sub{
+      margin:0 0 16px;
+      color: var(--muted);
+      line-height:1.45;
+      font-size: 15px;
+    }
+
+    .paper{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(600px 250px at 20% 0%, rgba(255,255,255,.06), transparent 60%),
+        rgba(0,0,0,.10);
+      padding: 18px 16px;
+      min-height: 220px;
+      position:relative;
+      max-height: 52vh;
+      overflow:auto;
+    }
+
+    .text{
+      font-size: 18px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .cursor{
+      display:inline-block;
+      width:10px;
+      margin-left:2px;
+      animation: blink 1s steps(2, start) infinite;
+      color: var(--gold);
+    }
+    @keyframes blink{ to { opacity:0; } }
+
+    .controls{
+      margin-top: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-weight: 600;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{ background: rgba(0,0,0,.28); }
+    .btn:active{ transform: translateY(1px); }
+
+    .btn.primary{
+      border-color: rgba(255,212,138,.30);
+      background: rgba(255,212,138,.08);
+    }
+
+    .hint{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* keyword effects */
+    .kw-love{
+      color: var(--red);
+      text-shadow: 0 0 18px rgba(255,90,106,.25);
+      position:relative;
+    }
+    .kw-love.pop{ animation: pop .35s ease; }
+    .kw-you{
+      color: var(--gold);
+      text-shadow: 0 0 18px rgba(255,212,138,.20);
+    }
+    .kw-forever{
+      color: var(--green);
+      text-shadow: 0 0 18px rgba(119,211,155,.18);
+      position:relative;
+    }
+    @keyframes pop{
+      50%{ transform: translateY(-1px) scale(1.06); }
+    }
+
+    /* floating hearts */
+    .heart{
+      position: fixed;
+      font-size: 18px;
+      pointer-events:none;
+      opacity:.9;
+      animation: floatUp 1.4s ease-out forwards;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.25));
+      z-index: 80;
+    }
+    @keyframes floatUp{
+      to{ transform: translateY(-90px) scale(1.1); opacity:0; }
+    }
+
+    /* Lock overlay */
+    .overlay{
+      position:fixed;
+      inset:0;
+      display:grid;
+      place-items:center;
+      background: radial-gradient(900px 500px at 50% 30%, rgba(255,212,138,.10), rgba(0,0,0,.65));
+      backdrop-filter: blur(10px);
+      z-index:50;
+    }
+    .lock{
+      width:min(560px, 92vw);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(15,34,54,.70);
+      box-shadow: var(--shadow);
+      padding: 22px 18px;
+      text-align:center;
+    }
+    .gift{
+      font-size: 52px;
+      margin: 4px 0 8px;
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.35));
+    }
+    .lock p{
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height:1.5;
+    }
+
+    /* Finale (full screen) */
+    .finalOverlay{
+      position:fixed;
+      inset:0;
+      display:grid;
+      place-items:center;
+      background: radial-gradient(900px 500px at 50% 30%, rgba(255,212,138,.12), rgba(0,0,0,.78));
+      backdrop-filter: blur(12px);
+      z-index: 70;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity 900ms ease;
+    }
+    .finalOverlay.show{
+      opacity: 1;
+      pointer-events:auto;
+    }
+    .finalBox{
+      width:min(760px, 92vw);
+      padding: 24px 18px;
+      text-align:center;
+    }
+    .finalText{
+      font-size: clamp(28px, 4.6vw, 46px);
+      line-height: 1.15;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(255,212,138,.25);
+      margin: 0;
+    }
+
+    @media (max-width:480px){
+      .text{ font-size: 17px; }
+      .controls{ justify-content:center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="snow"></div>
+
+  <!-- Overlay / Entsperren -->
+  <div class="overlay" id="overlay">
+    <div class="lock">
+      <div class="gift">🎁</div>
+      <h1>Ein kleiner Weihnachtsbrief</h1>
+      <p>Tippe auf „Öffnen“.</p>
+      <button class="btn primary" id="openBtn">Öffnen 🎄</button>
+    </div>
+  </div>
+
+  <!-- Finale fullscreen overlay -->
+  <div class="finalOverlay" id="finalOverlay" aria-hidden="true">
+    <div class="finalBox">
+      <p class="finalText" id="finalOverlayText"></p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div class="badge"><span class="dot"></span> Für mein Herz</div>
+        <div class="music" title="Musik">
+          <div class="bar"></div> <span id="musicStatus">Musik bereit</span>
+        </div>
+      </div>
+
+      <h1>🎄 Frohe Weihnachten</h1>
+      <p class="sub">Ein Brief, der sich Zeile für Zeile entfaltet.</p>
+
+      <div class="paper" id="paper">
+        <div class="text" id="text"></div><span class="cursor" id="cursor">|</span>
+      </div>
+
+      <div class="controls">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn primary" id="nextBtn" disabled>Weiter</button>
+          <button class="btn" id="restartBtn" disabled>Nochmal lesen</button>
+        </div>
+        <div class="hint" id="hint">Tippe auf „Öffnen“, dann geht’s los.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Musik: lege eine Datei "music.mp3" in denselben Ordner -->
+  <audio id="bgm" src="music.mp3" preload="auto" loop></audio>
+
+  <script>
+    // ====== HIER TEXT EINTRAGEN ======
+    // Jede Zeile = ein Abschnitt, der per Button weitergeht.
+    const LETTER_LINES = [
+      "Meine Aileeni",
+      "ich habe dir lange nichts geschrieben und wollte dieses mal etwas haben was lange bleibt.",
+      "Dieses Jahr war sehr gemischt aber wir haben das beste draus gemacht.",
+      "So viele neue Sachen sind passieren und werden im nächsten Jahr noch passieren.",
+      "Ich freue mich darauf neue Dinge mit dir zu erleben, hoffentlich die Welt zu sehen und zu erleben wie wir uns entwickeln.",
+      "Du warst das ganze Jahr für mich da obwohl ich nicht immer so einfach war.",
+      "Ich liebe dich so sehr und finde es unglaublich, dass wir schon unser drittes Weihnachten zusammen verbringen.",
+      "Bald hoffentlich zusammen in unserem eigenen Zuhause mit unserem eignen Weihnachtsbaum.",
+      "Danke, dass du immer für mich da bist Aileen.",
+      "Ich freue mich auf das neue Jahr mit dir."
+    ];
+
+    // Letzter Satz – erscheint alleine, zentriert und blendet sich danach aus
+    const FINAL_SENTENCE = "Frohe Weihnachten, mein Herz ❤️";
+
+    // Keyword-Effekte
+    const KEYWORDS = [
+      { word: "liebe", cls: "kw-love", heart: true },
+      { word: "Liebe", cls: "kw-love", heart: true },
+      { word: "liebe dich", cls: "kw-love", heart: true },
+      { word: "du", cls: "kw-you", heart: false },
+      { word: "Dich", cls: "kw-you", heart: false },
+      { word: "für immer", cls: "kw-forever", heart: false },
+      { word: "immer", cls: "kw-forever", heart: false }
+    ];
+
+    // Typewriter Settings
+    const TYPE_SPEED = 22;          // ms pro Buchstabe
+    const PAUSE_BETWEEN_LINES = 250;
+
+    // Finale timing
+    const FINAL_HOLD_MS = 2200;     // wie lange der letzte Satz stehen bleibt
+    const FINAL_FADE_MS = 900;      // muss zu CSS transition passen
+
+    // DOM
+    const overlay = document.getElementById("overlay");
+    const openBtn = document.getElementById("openBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const hint = document.getElementById("hint");
+
+    const textEl = document.getElementById("text");
+    const cursor = document.getElementById("cursor");
+    const paper = document.getElementById("paper");
+
+    const bgm = document.getElementById("bgm");
+    const musicStatus = document.getElementById("musicStatus");
+
+    const finalOverlay = document.getElementById("finalOverlay");
+    const finalOverlayText = document.getElementById("finalOverlayText");
+
+    // State
+    let lineIndex = 0;
+    let isTyping = false;
+    let finalShown = false;
+
+    function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = "❤️";
+      const x = Math.random() * (window.innerWidth - 20) + 10;
+      const y = paper.getBoundingClientRect().top + 50 + Math.random() * 120;
+      h.style.left = x + "px";
+      h.style.top = y + "px";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 1500);
+    }
+
+    function applyKeywordEffects(node){
+      let html = node.innerHTML;
+
+      // Replace longer keywords first to avoid partial replacements
+      const sorted = [...KEYWORDS].sort((a,b) => b.word.length - a.word.length);
+
+      for(const k of sorted){
+        const safe = k.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        // allow matching within text (not strict word boundaries for phrases)
+        const re = new RegExp(safe, "g");
+        html = html.replace(re, `<span class="${k.cls}" data-heart="${k.heart}">${k.word}</span>`);
+      }
+
+      node.innerHTML = html;
+
+      node.querySelectorAll(".kw-love").forEach(el => {
+        el.classList.remove("pop");
+        void el.offsetWidth;
+        el.classList.add("pop");
+        if(el.dataset.heart === "true") spawnHeart();
+      });
+    }
+
+    async function typeLine(line){
+      isTyping = true;
+      nextBtn.disabled = true;
+      restartBtn.disabled = true;
+
+      const p = document.createElement("div");
+      p.style.marginBottom = "10px";
+      textEl.appendChild(p);
+
+      let raw = "";
+      for(const ch of line){
+        raw += ch;
+        p.textContent = raw;
+        await sleep(TYPE_SPEED);
+      }
+
+      // safe HTML then apply effects
+      p.innerHTML = p.textContent
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/\n/g,"<br>");
+      applyKeywordEffects(p);
+
+      await sleep(PAUSE_BETWEEN_LINES);
+
+      isTyping = false;
+      nextBtn.disabled = false;
+      restartBtn.disabled = false;
+
+      paper.scrollTop = paper.scrollHeight;
+    }
+
+    async function typeFinalOverlay(sentence){
+      finalOverlayText.textContent = "";
+      finalOverlay.classList.add("show");
+      finalOverlay.setAttribute("aria-hidden", "false");
+
+      let raw = "";
+      for(const ch of sentence){
+        raw += ch;
+        finalOverlayText.textContent = raw;
+        await sleep(18);
+      }
+
+      // a few hearts for vibe
+      for(let i=0;i<3;i++){ spawnHeart(); await sleep(140); }
+
+      await sleep(FINAL_HOLD_MS);
+
+      finalOverlay.classList.remove("show");
+      finalOverlay.setAttribute("aria-hidden", "true");
+
+      // wait for fade-out to complete
+      await sleep(FINAL_FADE_MS);
+    }
+
+    async function showNext(){
+      if(isTyping || finalShown) return;
+
+      if(lineIndex >= LETTER_LINES.length){
+        // show final sentence alone
+        finalShown = true;
+        nextBtn.disabled = true;
+        restartBtn.disabled = true;
+        cursor.style.display = "none";
+        hint.textContent = "";
+
+        await typeFinalOverlay(FINAL_SENTENCE);
+
+        // after fade-out: allow restart
+        restartBtn.disabled = false;
+        hint.textContent = "Du kannst es nochmal lesen ❤️";
+        return;
+      }
+
+      hint.textContent = "Klick für die nächste Zeile…";
+      await typeLine(LETTER_LINES[lineIndex]);
+      lineIndex++;
+
+      if(lineIndex >= LETTER_LINES.length){
+        hint.textContent = "Noch ein Klick…";
+      }
+    }
+
+    function resetAll(){
+      lineIndex = 0;
+      isTyping = false;
+      finalShown = false;
+      textEl.innerHTML = "";
+      cursor.style.display = "inline-block";
+
+      nextBtn.textContent = "Weiter";
+      nextBtn.disabled = false;
+      restartBtn.disabled = false;
+
+      hint.textContent = "Klick für die nächste Zeile…";
+      paper.scrollTop = 0;
+
+      // reset final overlay if it was visible
+      finalOverlay.classList.remove("show");
+      finalOverlay.setAttribute("aria-hidden", "true");
+      finalOverlayText.textContent = "";
+    }
+
+    async function startExperience(){
+      overlay.style.display = "none";
+      hint.textContent = "Klick für die nächste Zeile…";
+      nextBtn.disabled = false;
+      restartBtn.disabled = false;
+
+      // Music: autoplay on user gesture
+      try{
+        await bgm.play();
+        musicStatus.textContent = "Musik läuft";
+      }catch(e){
+        musicStatus.textContent = "Musik blockiert";
+      }
+
+      // Start first line automatically
+      await showNext();
+    }
+
+    // Events
+    openBtn.addEventListener("click", startExperience);
+    nextBtn.addEventListener("click", showNext);
+    restartBtn.addEventListener("click", () => {
+      resetAll();
+      try{ bgm.currentTime = 0; bgm.play(); }catch(e){}
+    });
+
+    // Click on love word spawns heart (cute)
+    paper.addEventListener("click", (e) => {
+      const t = e.target;
+      if(t.classList && t.classList.contains("kw-love")) spawnHeart();
+    });
+  </script>
+</body>
+</html>
